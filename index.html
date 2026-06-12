@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FyQ Arcade Challenge - 3º ESO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>🧪 FyQ Arcade Challenge 🧪</h1>
+        <p>Demuestra lo que sabes de Física y Química jugando</p>
+        <div class="nav-buttons">
+            <button onclick="switchGame(1)" id="btn-game1" class="active">Juego 1: Atomic Alchemy</button>
+            <button onclick="switchGame(2)" id="btn-game2">Juego 2: Fórmula Sprint</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="juego1" class="game-section">
+            <h2>⚛️ Juego 1: Atomic Alchemy ⚛️</h2>
+            <p class="instructions">¡Crea el átomo correcto! Ajusta los protones, electrones y neutrones según el elemento que se te pide antes de que el átomo se vuelva inestable.</p>
+            
+            <div class="game-container">
+                <div class="target-card">
+                    <h3>Elemento a construir: <span id="g1-target-name">Aluminio (Al)</span></h3>
+                    <p>Pistas del examen: <span id="g1-clues">Z = 13, A = 27</span></p>
+                </div>
+
+                <div class="dashboard">
+                    <div class="stat">Puntos: <span id="g1-score">0</span></div>
+                    <div class="stat">Tiempo: <span id="g1-time">30</span>s</div>
+                </div>
+
+                <div class="atomic-controls">
+                    <div class="control-group">
+                        <label>Protones (+): <span id="val-p">0</span></label>
+                        <button onclick="changeParticle('p', 1)">+</button>
+                        <button onclick="changeParticle('p', -1)">-</button>
+                    </div>
+                    <div class="control-group">
+                        <label>Electrones (-): <span id="val-e">0</span></label>
+                        <button onclick="changeParticle('e', 1)">+</button>
+                        <button onclick="changeParticle('e', -1)">-</button>
+                    </div>
+                    <div class="control-group">
+                        <label>Neutrones (0): <span id="val-n">0</span></label>
+                        <button onclick="changeParticle('n', 1)">+</button>
+                        <button onclick="changeParticle('n', -1)">-</button>
+                    </div>
+                </div>
+
+                <button class="action-btn" onclick="checkAtomicGame()">¡Estabilizar Átomo!</button>
+                <p id="g1-feedback" class="feedback"></p>
+            </div>
+        </section>
+
+        <section id="juego2" class="game-section hidden">
+            <h2>🧪 Juego 2: Fórmula Sprint 🧪</h2>
+            <p class="instructions">¡El laboratorio va a explotar! Resuelve las preguntas de formulación y cálculos moleculares a toda velocidad.</p>
+            
+            <div class="game-container">
+                <div class="dashboard">
+                    <div class="stat">Puntos: <span id="g2-score">0</span></div>
+                    <div class="stat">Racha: 🔥 <span id="g2-streak">0</span></div>
+                </div>
+
+                <div class="question-card">
+                    <h3 id="g2-question">¿Cuál es la fórmula del Dióxido de plomo?</h3>
+                </div>
+
+                <div class="options-grid" id="g2-options">
+                    </div>
+
+                <p id="g2-feedback" class="feedback"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Proyecto de Física y Química - Creado por [Tu Nombre]</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
