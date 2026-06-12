@@ -1,147 +1,105 @@
-// --- SISTEMA DE NAVEGACIÓN ---
-function switchGame(gameNum) {
-    document.getElementById('juego1').classList.add('hidden');
-    document.getElementById('juego2').classList.add('hidden');
-    document.getElementById('btn-game1').classList.remove('active');
-    document.getElementById('btn-game2').classList.remove('active');
-
-    document.getElementById(`juego${gameNum}`).classList.remove('hidden');
-    document.getElementById(`btn-game${gameNum}`).classList.add('active');
-    
-    if(gameNum === 1) initGame1();
-    if(gameNum === 2) initGame2();
-}
-
-// --- LOGICA JUEGO 1: ATOMIC ALCHEMY ---
-let g1Score = 0;
-let g1Time = 30;
-let g1TimerInterval;
-let currentTargetAtom = {};
+let totalScore = 0;
+let atomoActual = {};
 let playerAtom = { p: 0, e: 0, n: 0 };
+let currentJuego = 1;
 
-const elementsDb = [
-    { name: "Aluminio (Al)", z: 13, a: 27, p: 13, e: 13, n: 14 },
-    { name: "Estroncio (Sr)", z: 38, a: 88, p: 38, e: 38, n: 50 },
-    { name: "Neón (Ne)", z: 10, a: 20, p: 10, e: 10, n: 10 },
-    { name: "Oxígeno (O)", z: 8, a: 16, p: 8, e: 8, n: 8 }
+// Base de datos del temario oficial (PDF)
+const DB_ATOMOS = [
+    { nombre: "Aluminio (Al)", pistas: "Z = 13, A = 27", p: 13, e: 13, n: 14 },
+    { nombre: "Estroncio (Sr)", pistas: "Z = 38, A = 88", p: 38, e: 38, n: 50 },
+    { nombre: "Neón (Ne)", pistas: "Z = 10, N = 10 (Estable)", p: 10, e: 10, n: 10 },
+    { nombre: "Oxígeno (O)", pistas: "Z = 8, A = 16", p: 8, e: 8, n: 8 }
 ];
 
-function initGame1() {
-    g1Score = 0;
-    document.getElementById('g1-score').innerText = g1Score;
-    nextAtom();
+const DB_FISICA = [
+    { q: "Conectamos una bombilla de R=500 Ω a una pila de V=9V. ¿Qué intensidad circula?", a: "0.018 A", o: ["0.018 A", "55.5 A", "4500 A", "1.8 A"] },
+    { q: "Circulan 4 A por una plancha enchufada a la red de V=220V. ¿Cuál es su resistencia?", a: "55 Ω", o: ["880 Ω", "55 Ω", "0.018 Ω", "110 Ω"] },
+    { q: "Estiramos 50 cm (0.5m) un muelle horizontal con K=1200 N/m. ¿Qué fuerza ejercemos?", a: "600 N", o: ["2400 N", "1200 N", "600 N", "60 N"] },
+    { q: "Colgamos una masa de 2 kg (F=19.6N) de un muelle vertical con K=650 N/m. ¿Cuánto se estira?", a: "3 cm (0.03m)", o: ["3 cm (0.03m)", "15 cm (0.15m)", "30 cm (0.3m)", "1.3 cm (0.013m)"] }
+];
+
+function cambiarJuego(num) {
+    currentJuego = num;
+    document.getElementById('game1').classList.toggle('hidden', num !== 1);
+    document.getElementById('game2').classList.toggle('hidden', num !== 2);
+    document.getElementById('tab1').classList.toggle('active', num === 1);
+    document.getElementById('tab2').classList.toggle('active', num === 2);
+    
+    document.getElementById('fb1').innerText = "";
+    document.getElementById('fb2').innerText = "";
+
+    if (num === 1) nuevoAtomo();
+    if (num === 2) nuevaPreguntaFisica();
 }
 
-function nextAtom() {
-    clearInterval(g1TimerInterval);
+// --- JUEGO 1: CONSTRUCTOR ATÓMICO ---
+function nuevoAtomo() {
     playerAtom = { p: 0, e: 0, n: 0 };
-    updateParticlesDisplay();
-    document.getElementById('g1-feedback').innerText = "";
-    
-    currentTargetAtom = elementsDb[Math.floor(Math.random() * elementsDb.length)];
-    document.getElementById('g1-target-name').innerText = currentTargetAtom.name;
-    document.getElementById('g1-clues').innerText = `Z = ${currentTargetAtom.z}, A = ${currentTargetAtom.a}`;
-    
-    g1Time = 30;
-    document.getElementById('g1-time').innerText = g1Time;
-    g1TimerInterval = setInterval(() => {
-        g1Time--;
-        document.getElementById('g1-time').innerText = g1Time;
-        if(g1Time <= 0) {
-            clearInterval(g1TimerInterval);
-            document.getElementById('g1-feedback').className = "feedback wrong";
-            document.getElementById('g1-feedback').innerText = "¡Tiempo agotado! El átomo colapsó.";
-        }
-    }, 1000);
+    actualizarContadores();
+    atomoActual = DB_ATOMOS[Math.floor(Math.random() * DB_ATOMOS.length)];
+    document.getElementById('g1-nombre').innerText = atomoActual.nombre;
+    document.getElementById('g1-pistas').innerText = atomoActual.pistas;
 }
 
-function changeParticle(type, amount) {
-    playerAtom[type] = Math.max(0, playerAtom[type] + amount);
-    updateParticlesDisplay();
+// Control por pulsación directa de tarjeta (Súper cómodo)
+function modificar(tipo) {
+    playerAtom[tipo]++;
+    if(playerAtom[tipo] > 60) playerAtom[tipo] = 0; // Reseteo cíclico para evitar atascos
+    actualizarContadores();
 }
 
-function updateParticlesDisplay() {
-    document.getElementById('val-p').innerText = playerAtom.p;
-    document.getElementById('val-e').innerText = playerAtom.e;
-    document.getElementById('val-n').innerText = playerAtom.n;
+function actualizarContadores() {
+    document.getElementById('c-p').innerText = playerAtom.p;
+    document.getElementById('c-e').innerText = playerAtom.e;
+    document.getElementById('c-n').innerText = playerAtom.n;
 }
 
-function checkAtomicGame() {
-    if(g1Time <= 0) return;
-
-    if(playerAtom.p === currentTargetAtom.p && 
-       playerAtom.e === currentTargetAtom.e && 
-       playerAtom.n === currentTargetAtom.n) {
-        g1Score += 100;
-        document.getElementById('g1-score').innerText = g1Score;
-        document.getElementById('g1-feedback').className = "feedback correct";
-        document.getElementById('g1-feedback').innerText = "¡Excelente! Átomo perfectamente estable.";
-        clearInterval(g1TimerInterval);
-        setTimeout(nextAtom, 2000);
+function validarAtomo() {
+    const fb = document.getElementById('fb1');
+    if (playerAtom.p === atomoActual.p && playerAtom.e === atomoActual.e && playerAtom.n === atomoActual.n) {
+        fb.className = "feedback correct";
+        fb.innerText = "✨ ¡Espectacular! Átomo estable y correcto. +100pts";
+        totalScore += 100;
+        document.getElementById('score').innerText = totalScore;
+        setTimeout(nuevoAtomo, 1800);
     } else {
-        document.getElementById('g1-feedback').className = "feedback wrong";
-        document.getElementById('g1-feedback').innerText = "¡Inestable! Revisa los cálculos de Z y A.";
+        fb.className = "feedback wrong";
+        fb.innerText = "❌ Inestable. ¡Sigue pulsando para ajustar las partículas!";
     }
 }
 
-
-// --- LOGICA JUEGO 2: FÓRMULA SPRINT ---
-let g2Score = 0;
-let g2Streak = 0;
-let currentQuestion = {};
-
-const quizDb = [
-    { q: "¿Cuál es la fórmula sistemática con prefijos del PbO₂?", a: "Dióxido de plomo", o: ["Óxido de plomo", "Dióxido de plomo", "Monóxido de plomo", "Plomo de oxígeno"] },
-    { q: "¿Cuál es la fórmula del compuesto FeH₃?", a: "Trihidruro de hierro", o: ["Hidruro de hierro", "Trihidruro de hierro", "Óxido férrico", "Dihidruro de hierro"] },
-    { q: "Calcula la masa molecular del Butano (C₄H₁₀) si C=12u y H=1u.", a: "58 u", o: ["44 u", "58 u", "13 u", "50 u"] },
-    { q: "¿Cuántos moles hay en 150g de NaCl? (Masa molar = 58,5 g/mol)", a: "2,56 moles", o: ["1,50 moles", "2,56 moles", "5,85 moles", "3,12 moles"] },
-    { q: "¿Qué ión forma el Oxígeno (Z=8) al ganar 2 electrones?", a: "Anión O²⁻", o: ["Catión O²⁺", "Anión O²⁻", "Anión O⁻", "Catión O⁺"] }
-];
-
-function initGame2() {
-    g2Score = 0;
-    g2Streak = 0;
-    document.getElementById('g2-score').innerText = g2Score;
-    document.getElementById('g2-streak').innerText = g2Streak;
-    nextQuestion();
-}
-
-function nextQuestion() {
-    document.getElementById('g2-feedback').innerText = "";
-    currentQuestion = quizDb[Math.floor(Math.random() * quizDb.length)];
-    document.getElementById('g2-question').innerText = currentQuestion.q;
+// --- JUEGO 2: CONECTOR ELÉCTRICO ---
+function nuevaPreguntaFisica() {
+    const p = DB_FISICA[Math.floor(Math.random() * DB_FISICA.length)];
+    document.getElementById('g2-enunciado').innerText = p.q;
     
-    const optionsContainer = document.getElementById('g2-options');
-    optionsContainer.innerHTML = "";
+    const contenedor = document.getElementById('g2-opciones');
+    contenedor.innerHTML = "";
     
-    currentQuestion.o.forEach(option => {
-        const btn = document.createElement('button');
-        btn.className = "option-btn";
-        btn.innerText = option;
-        btn.onclick = () => checkQuizGame(option);
-        optionsContainer.appendChild(btn);
+    p.o.forEach(opt => {
+        const b = document.createElement('button');
+        b.className = "opt-btn";
+        b.innerText = opt;
+        b.onclick = () => verificarFisica(opt, p.a);
+        contenedor.appendChild(b);
     });
 }
 
-function checkQuizGame(selected) {
-    if(selected === currentQuestion.a) {
-        g2Score += 50 + (g2Streak * 10);
-        g2Streak++;
-        document.getElementById('g2-feedback').className = "feedback correct";
-        document.getElementById('g2-feedback').innerText = "🔥 ¡Correcto! ¡Sigue así!";
+function verificarFisica(elegida, correcta) {
+    const fb = document.getElementById('fb2');
+    if (elegida === correcta) {
+        fb.className = "feedback correct";
+        fb.innerText = "⚡ ¡Conexión perfecta! Circuito cerrado con éxito. +100pts";
+        totalScore += 100;
+        document.getElementById('score').innerText = totalScore;
+        setTimeout(nuevaPreguntaFisica, 1800);
     } else {
-        g2Streak = 0;
-        document.getElementById('g2-feedback').className = "feedback wrong";
-        document.getElementById('g2-feedback').innerText = `Incorrecto. La respuesta era: ${currentQuestion.a}`;
+        fb.className = "feedback wrong";
+        fb.innerText = "💥 ¡Cortocircuito! Intenta con otra respuesta.";
     }
-    
-    document.getElementById('g2-score').innerText = g2Score;
-    document.getElementById('g2-streak').innerText = g2Streak;
-    
-    setTimeout(nextQuestion, 2000);
 }
 
-// Iniciar el primer juego de entrada
+// Inicialización
 window.onload = () => {
-    initGame1();
+    nuevoAtomo();
 };
