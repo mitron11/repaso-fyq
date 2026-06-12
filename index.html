@@ -21,30 +21,37 @@
     <main>
         <section id="game1" class="card active-game">
             <h2>⚛️ El Constructor Atómico</h2>
-            <p>¡Haz clic directamente en las tarjetas para añadir partículas al átomo solicitado!</p>
+            <p>Haz clic para añadir partículas. ¡O cambia el modo abajo para restar!</p>
             
             <div class="target">
                 <h3 id="g1-nombre">Cargando...</h3>
                 <div class="pistas" id="g1-pistas"></div>
             </div>
 
+            <div class="mode-selector">
+                <button id="btn-mode-add" class="mode-btn active" onclick="setModoHerramienta('sumar')">🟢 Modo: Añadir (+)</button>
+                <button id="btn-mode-sub" class="mode-btn" onclick="setModoHerramienta('restar')">🔴 Modo: Quitar (-)</button>
+            </div>
+
             <div class="clicker-grid">
-                <div class="click-card" onclick="modificar('p')">
+                <div class="click-card" onclick="gestionarClic('p')" oncontextmenu="gestionarClicDerecho(event, 'p')">
                     <div class="icon" style="background: #ff4d4d;">+</div>
                     <h4>Protones</h4>
                     <div class="counter" id="c-p">0</div>
                 </div>
-                <div class="click-card" onclick="modificar('e')">
+                <div class="click-card" onclick="gestionarClic('e')" oncontextmenu="gestionarClicDerecho(event, 'e')">
                     <div class="icon" style="background: #33ccff;">-</div>
                     <h4>Electrones</h4>
                     <div class="counter" id="c-e">0</div>
                 </div>
-                <div class="click-card" onclick="modificar('n')">
+                <div class="click-card" onclick="gestionarClic('n')" oncontextmenu="gestionarClicDerecho(event, 'n')">
                     <div class="icon" style="background: #ffcc00; color: #000;">0</div>
                     <h4>Neutrones</h4>
                     <div class="counter" id="c-n">0</div>
                 </div>
             </div>
+
+            <p class="tip-text">💡 Pista: Si juegas en PC, puedes hacer clic derecho sobre las tarjetas para restar directamente.</p>
 
             <button class="btn" onclick="validarAtomo()">🧪 Verificar Estabilidad</button>
             <div id="fb1" class="feedback"></div>
@@ -58,8 +65,7 @@
                 <h3 id="g2-enunciado">Cargando desafío...</h3>
             </div>
 
-            <div class="options" id="g2-opciones">
-                </div>
+            <div class="options" id="g2-opciones"></div>
             
             <div id="fb2" class="feedback"></div>
         </section>
