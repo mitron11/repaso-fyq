@@ -1,9 +1,9 @@
-let totalScore = 0;
+vlet totalScore = 0;
 let atomoActual = {};
 let playerAtom = { p: 0, e: 0, n: 0 };
 let currentJuego = 1;
+let modoHerramienta = 'sumar'; // Puede ser 'sumar' o 'restar'
 
-// Base de datos del temario oficial (PDF)
 const DB_ATOMOS = [
     { nombre: "Aluminio (Al)", pistas: "Z = 13, A = 27", p: 13, e: 13, n: 14 },
     { nombre: "Estroncio (Sr)", pistas: "Z = 38, A = 88", p: 38, e: 38, n: 50 },
@@ -41,10 +41,29 @@ function nuevoAtomo() {
     document.getElementById('g1-pistas').innerText = atomoActual.pistas;
 }
 
-// Control por pulsación directa de tarjeta (Súper cómodo)
-function modificar(tipo) {
-    playerAtom[tipo]++;
-    if(playerAtom[tipo] > 60) playerAtom[tipo] = 0; // Reseteo cíclico para evitar atascos
+// Cambiar modo de herramienta (para móviles o clics normales)
+function setModoHerramienta(modo) {
+    modoHerramienta = modo;
+    document.getElementById('btn-mode-add').classList.toggle('active', modo === 'sumar');
+    document.getElementById('btn-mode-sub').classList.toggle('active', modo === 'restar');
+}
+
+// Gestionar clic normal (izquierdo o toque de pantalla)
+function gestionarClic(tipo) {
+    if (modoHerramienta === 'sumar') {
+        playerAtom[tipo]++;
+    } else {
+        if (playerAtom[tipo] > 0) playerAtom[tipo]--;
+    }
+    actualizarContadores();
+}
+
+// Gestionar clic derecho en PC (Suma comodidad extrema)
+function gestionarClicDerecho(event, tipo) {
+    event.preventDefault(); // Evita que se abra el menú del navegador
+    if (playerAtom[tipo] > 0) {
+        playerAtom[tipo]--;
+    }
     actualizarContadores();
 }
 
@@ -64,7 +83,7 @@ function validarAtomo() {
         setTimeout(nuevoAtomo, 1800);
     } else {
         fb.className = "feedback wrong";
-        fb.innerText = "❌ Inestable. ¡Sigue pulsando para ajustar las partículas!";
+        fb.innerText = "❌ Inestable. ¡Ajusta las partículas sumando o restando!";
     }
 }
 
@@ -99,7 +118,6 @@ function verificarFisica(elegida, correcta) {
     }
 }
 
-// Inicialización
 window.onload = () => {
     nuevoAtomo();
 };
