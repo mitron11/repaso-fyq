@@ -1,5 +1,6 @@
 # repaso-fyq
 Estudiante: Miguel Fco García Ortega 
+
 Curso: 3º ESO - 25/26  
 Presentación del Proyecto:
 Este proyecto ha sido desarrollado con el objetivo de aplicar los conocimientos tecnológicos de programación web al temario oficial de la asignatura de Física y Química. En lugar de realizar un repaso tradicional, he diseñado y programado desde cero dos videojuegos educativos interactivos utilizando HTML, CSS y JavaScript.  El propósito es demostrar la comprensión de conceptos clave a través de la gamificación:
