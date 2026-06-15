@@ -10,6 +10,10 @@ const DB_ATOMOS = [
     { nombre: "Estroncio (Sr)", pistas: "Z = 38, A = 88", p: 38, e: 38, n: 50 },
     { nombre: "Neón (Ne)", pistas: "Z = 10, N = 10 (Estable)", p: 10, e: 10, n: 10 },
     { nombre: "Oxígeno (O)", pistas: "Z = 8, A = 16", p: 8, e: 8, n: 8 }
+    { nombre: "Boro (B)", pistas: "Z = 5, A = 11", p: 5, e: 5, n: 6 }
+    { nombre: "Hidrogeno (H)", pistas: "Z = 1, A = 1", p: 1, e: 1, n: 0 }
+    { nombre: "Cobalto (Co)", pistas: "Z = 27, A = 59", p: 27, e: 27, n: 32 }
+
 ];
 
 const DB_FISICA = [
