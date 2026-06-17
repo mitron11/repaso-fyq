@@ -166,7 +166,6 @@ p { font-size: 14px; line-height: 1.5; margin-top: 0; color: var(--text-dark); }
 
 .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000000; }
 
-/* --- JUEGO 2 DESPEJES --- */
 .physics-display-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
