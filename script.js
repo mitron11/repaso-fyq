@@ -4,7 +4,7 @@ let playerAtom = { p: 0, e: 0, n: 0 };
 let currentJuego = 1;
 let modoHerramienta = 'sumar'; 
 
-let g2AlargamientoCorrecto = 0;
+let g2RespuestaCorrecta = 0;
 
 const DB_ATOMOS = [
     { nombre: "Hidrógeno-1 (Átomo Neutro)", pistas: "Z = 1, A = 1", p: 1, e: 1, n: 0 },
@@ -59,6 +59,19 @@ const DB_ATOMOS = [
     { nombre: "Estroncio (Sr)", pistas: "Z = 38, A = 88", p: 38, e: 38, n: 50 }
 ];
 
+const DB_FUERZAS = [
+    { f: 10, k: 100, x: 10 },   { f: 20, k: 100, x: 20 },   { f: 50, k: 500, x: 10 },   { f: 5, k: 50, x: 10 },
+    { f: 15, k: 300, x: 5 },    { f: 40, k: 200, x: 20 },   { f: 30, k: 150, x: 20 },   { f: 8, k: 40, x: 20 },
+    { f: 100, k: 500, x: 20 },  { f: 60, k: 200, x: 30 },   { f: 25, k: 250, x: 10 },   { f: 12, k: 60, x: 20 },
+    { f: 9, k: 30, x: 30 },     { f: 18, k: 60, x: 30 },    { f: 4, k: 20, x: 20 },     { f: 35, k: 70, x: 50 },
+    { f: 14, k: 28, x: 50 },    { f: 80, k: 400, x: 20 },   { f: 75, k: 150, x: 50 },   { f: 200, k: 1000, x: 20 },
+    { f: 50, k: 100, x: 50 },   { f: 3, k: 30, x: 10 },     { f: 7, k: 70, x: 10 },     { f: 24, k: 120, x: 20 },
+    { f: 45, k: 90, x: 50 },    { f: 16, k: 80, x: 20 },    { f: 27, k: 90, x: 30 },    { f: 11, k: 22, x: 50 },
+    { f: 90, k: 300, x: 30 },   { f: 120, k: 400, x: 30 },  { f: 6, k: 12, x: 50 },     { f: 2, k: 10, x: 20 },
+    { f: 15, k: 50, x: 30 },    { f: 21, k: 70, x: 30 },    { f: 32, k: 160, x: 20 },   { f: 13, k: 26, x: 50 },
+    { f: 70, k: 350, x: 20 },   { f: 22, k: 110, x: 20 },   { f: 10, k: 20, x: 50 },    { f: 300, k: 1200, x: 25 }
+];
+
 function cambiarJuego(num) {
     currentJuego = num;
     document.getElementById('game1').classList.toggle('hidden', num !== 1);
@@ -70,7 +83,7 @@ function cambiarJuego(num) {
     document.getElementById('fb2').innerText = "";
 
     if (num === 1) nuevoAtomo();
-    if (num === 2) generarDesafioFuerzas();
+    if (num === 2) generarDesafioDespeje();
 }
 
 function nuevoAtomo() {
@@ -90,11 +103,8 @@ function setModoHerramienta(modo) {
 }
 
 function gestionarClic(tipo) {
-    if (modoHerramienta === 'sumar') {
-        playerAtom[tipo]++;
-    } else if (modoHerramienta === 'restar') {
-        if (playerAtom[tipo] > 0) playerAtom[tipo]--;
-    }
+    if (modoHerramienta === 'sumar') playerAtom[tipo]++;
+    else if (modoHerramienta === 'restar' && playerAtom[tipo] > 0) playerAtom[tipo]--;
     actualizarContadores();
 }
 
@@ -124,58 +134,79 @@ function validarAtomo() {
     }
 }
 
-function generarDesafioFuerzas() {
+function generarDesafioDespeje() {
     document.getElementById('fb2').innerText = "";
     
-    const combinacionesSencillas = [
-        { f: 10, k: 10, cm: 100 },
-        { f: 20, k: 20, cm: 100 },
-        { f: 5,  k: 10, cm: 50 },
-        { f: 15, k: 30, cm: 50 },
-        { f: 40, k: 20, cm: 200 },
-        { f: 30, k: 10, cm: 300 },
-        { f: 8,  k: 4,  cm: 200 },
-        { f: 50, k: 50, cm: 100 }
-    ];
+    const ejercicio = DB_FUERZAS[Math.floor(Math.random() * DB_FUERZAS.length)];
     
-    const desafio = combinacionesSencillas[Math.floor(Math.random() * combinacionesSencillas.length)];
-    g2AlargamientoCorrecto = desafio.cm;
+    const tipoIncognita = Math.floor(Math.random() * 3);
     
-    document.getElementById('g2-fuerza').innerText = desafio.f + " N";
-    document.getElementById('g2-constante').innerText = desafio.k + " N/m";
+    const panelDato1Lbl = document.getElementById('lbl-g2-dato1');
+    const panelDato1Val = document.getElementById('val-g2-dato1');
+    const panelDato2Lbl = document.getElementById('lbl-g2-dato2');
+    const panelDato2Val = document.getElementById('val-g2-dato2');
+    const enunciado = document.getElementById('g2-enunciado-incognita');
+    
+    let opciones = [];
+    
+    if (tipoIncognita === 0) {
+        panelDato1Lbl.innerText = "FUERZA APLICADA";
+        panelDato1Val.innerText = ejercicio.f + " N";
+        panelDato2Lbl.innerText = "CONSTANTE (K)";
+        panelDato2Val.innerText = ejercicio.k + " N/m";
+        enunciado.innerText = "¿CUÁL ES EL ALARGAMIENTO (x)?";
+        
+        g2RespuestaCorrecta = ejercicio.x;
+        opciones = [ejercicio.x, ejercicio.x + 10, ejercicio.x === 10 ? 40 : ejercicio.x - 5];
+        formatUnit = " cm";
+    } else if (tipoIncognita === 1) {
+        panelDato1Lbl.innerText = "CONSTANTE (K)";
+        panelDato1Val.innerText = ejercicio.k + " N/m";
+        panelDato2Lbl.innerText = "ALARGAMIENTO (x)";
+        panelDato2Val.innerText = ejercicio.x + " cm";
+        enunciado.innerText = "¿CUÁNTA FUERZA (F) SE HA HECHO?";
+        
+        g2RespuestaCorrecta = ejercicio.f;
+        opciones = [ejercicio.f, ejercicio.f + 15, ejercicio.f <= 10 ? 50 : ejercicio.f - 8];
+        formatUnit = " N";
+    } else {
+        panelDato1Lbl.innerText = "FUERZA APLICADA";
+        panelDato1Val.innerText = ejercicio.f + " N";
+        panelDato2Lbl.innerText = "ALARGAMIENTO (x)";
+        panelDato2Val.innerText = ejercicio.x + " cm";
+        enunciado.innerText = "¿CUÁL ES LA CONSTANTE ELÁSTICA (K)?";
+        
+        g2RespuestaCorrecta = ejercicio.k;
+        opciones = [ejercicio.k, ejercicio.k + 100, ejercicio.k <= 50 ? 200 : ejercicio.k - 40];
+        formatUnit = " N/m";
+    }
+    
+    opciones.sort(() => Math.random() - 0.5);
     
     const opcionesContenedor = document.getElementById('g2-opciones');
     opcionesContenedor.innerHTML = "";
     
-    const respuestasPosibles = [
-        desafio.cm,
-        desafio.cm + 50,
-        desafio.cm === 50 ? 150 : desafio.cm - 50
-    ];
-    
-    respuestasPosibles.sort(() => Math.random() - 0.5);
-    
-    respuestasPosibles.forEach(opcion => {
+    opciones.forEach(opc => {
         const btn = document.createElement('button');
         btn.className = "opt-btn";
-        btn.innerText = opcion + " cm";
-        btn.onclick = () => verificarRespuestaFuerza(opcion);
+        btn.innerText = opc + formatUnit;
+        btn.onclick = () => verificarRespuestaDespeje(opc);
         opcionesContenedor.appendChild(btn);
     });
 }
 
-function verificarRespuestaFuerza(seleccionada) {
+function verificarRespuestaDespeje(seleccionada) {
     const fb = document.getElementById('fb2');
     
-    if (seleccionada === g2AlargamientoCorrecto) {
+    if (seleccionada === g2RespuestaCorrecta) {
         fb.className = "feedback correct";
-        fb.innerText = "⭐ ¡CORRECTO! El dinamómetro marca el estiramiento exacto. +100 PTS";
+        fb.innerText = "⭐ ¡CORRECTO! Despeje y cálculo impecables. +100 PTS";
         totalScore += 100;
         document.getElementById('score').innerText = totalScore;
-        setTimeout(generarDesafioFuerzas, 1500);
+        setTimeout(generarDesafioDespeje, 1500);
     } else {
         fb.className = "feedback wrong";
-        fb.innerText = "❌ INCORRECTO. Recuerda aplicar la Ley de Hooke (F = K · x).";
+        fb.innerText = "❌ INCORRECTO. Revisa bien los despejes de la Ley de Hooke.";
     }
 }
 
