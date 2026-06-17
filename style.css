@@ -33,9 +33,7 @@ header {
     letter-spacing: 1px;
 }
 
-.logo span {
-    color: var(--color-tarjeta);
-}
+.logo span { color: var(--color-tarjeta); }
 
 .tabs {
     display: flex;
@@ -87,12 +85,7 @@ h2 {
     color: var(--color-borde);
 }
 
-p {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-top: 0;
-    color: var(--text-dark);
-}
+p { font-size: 14px; line-height: 1.5; margin-top: 0; color: var(--text-dark); }
 
 .target {
     background-color: rgba(16, 44, 38, 0.08);
@@ -142,10 +135,7 @@ p {
     user-select: none;
 }
 
-.click-card:hover {
-    background-color: rgba(233, 30, 99, 0.05);
-    border-color: var(--color-borde);
-}
+.click-card:hover { border-color: var(--color-borde); }
 
 .particle-tag {
     display: inline-block;
@@ -159,7 +149,6 @@ p {
 .electron { background-color: #2563eb; }
 .neutron { background-color: #d97706; }
 
-.click-card h4 { margin: 0 0 5px 0; font-size: 12px; color: var(--text-muted); }
 .counter { font-size: 28px; color: var(--text-dark); }
 .tip-text { font-size: 11px; color: var(--text-muted); text-align: center; margin-bottom: 20px; }
 
@@ -175,11 +164,9 @@ p {
     box-shadow: 4px 4px 0px #000000;
 }
 
-.btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0px #000000;
-}
+.btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000000; }
 
+/* --- JUEGO 2 DESPEJES --- */
 .physics-display-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -190,42 +177,17 @@ p {
 .physics-panel {
     background-color: #ffffff;
     border: 3px solid var(--text-dark);
+    border-top: 6px solid var(--color-borde);
     padding: 20px 10px;
     text-align: center;
     box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
 }
 
-.panel-force { border-top: 6px solid var(--color-borde); }
-.panel-k { border-top: 6px solid #d97706; }
+.physics-title { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+.physics-value { font-size: 28px; font-weight: bold; color: var(--text-dark); }
+.question-text { font-family: var(--fuente-titulo); font-size: 10px; text-align: center; margin: 20px 0; }
 
-.physics-title {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
-}
-
-.physics-value {
-    font-size: 34px;
-    font-weight: bold;
-    color: var(--text-dark);
-}
-
-.question-text {
-    font-family: var(--fuente-titulo);
-    font-size: 10px;
-    text-align: center;
-    line-height: 1.6;
-    margin: 20px 0 10px 0;
-    color: var(--text-dark);
-}
-
-.options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 15px 0;
-}
+.options { display: flex; flex-direction: column; gap: 10px; }
 
 .opt-btn {
     background-color: #ffffff;
@@ -234,43 +196,16 @@ p {
     padding: 14px;
     font-family: var(--fuente-botones);
     font-size: 15px;
-    text-align: center;
     cursor: pointer;
     box-shadow: 4px 4px 0px #000000;
-    transition: all 0.1s;
 }
 
-.opt-btn:hover {
-    background-color: var(--color-borde);
-    color: #ffffff;
-}
+.opt-btn:hover { background-color: var(--color-borde); color: #ffffff; }
+.opt-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000000; }
 
-.opt-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0px #000000;
-}
-
-.feedback {
-    margin-top: 20px;
-    font-size: 14px;
-    padding: 12px;
-    border: 3px solid var(--text-dark);
-    text-align: center;
-    display: none;
-}
+.feedback { margin-top: 20px; font-size: 14px; padding: 12px; border: 3px solid var(--text-dark); text-align: center; display: none; }
 .feedback:not(:empty) { display: block; }
-
 .correct { background-color: #d1fae5; color: #065f46; }
 .wrong { background-color: #fee2e2; color: #991b1b; }
 
-.score-sticky {
-    position: fixed;
-    bottom: 15px;
-    right: 15px;
-    background-color: var(--text-dark);
-    border: 3px solid var(--color-borde);
-    color: var(--color-tarjeta);
-    padding: 10px 20px;
-    font-size: 14px;
-    z-index: 200;
-}
+.score-sticky { position: fixed; bottom: 15px; right: 15px; background-color: var(--text-dark); border: 3px solid var(--color-borde); color: var(--color-tarjeta); padding: 10px 20px; font-size: 14px; z-index: 200; }
