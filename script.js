@@ -4,10 +4,8 @@ let playerAtom = { p: 0, e: 0, n: 0 };
 let currentJuego = 1;
 let modoHerramienta = 'sumar'; 
 
-// Variables globales para el Juego 2 (Fuerzas)
 let g2AlargamientoCorrecto = 0;
 
-// --- BASE DE DATOS JUEGO 1: 50 ELEMENTOS, IONES E ISÓTOPOS ---
 const DB_ATOMOS = [
     { nombre: "Hidrógeno-1 (Átomo Neutro)", pistas: "Z = 1, A = 1", p: 1, e: 1, n: 0 },
     { nombre: "Deuterio (Isótopo de Hidrógeno)", pistas: "Z = 1, A = 2", p: 1, e: 1, n: 1 },
@@ -75,7 +73,6 @@ function cambiarJuego(num) {
     if (num === 2) generarDesafioFuerzas();
 }
 
-// --- JUEGO 1: EL CONSTRUCTOR ATÓMICO ---
 function nuevoAtomo() {
     playerAtom = { p: 0, e: 0, n: 0 };
     modoHerramienta = 'sumar';
@@ -127,12 +124,9 @@ function validarAtomo() {
     }
 }
 
-// --- JUEGO 2: EL DINAMÓMETRO (SÚPER DIRECTO Y SENCILLO) ---
 function generarDesafioFuerzas() {
     document.getElementById('fb2').innerText = "";
     
-    // Parejas de números redondos muy fáciles para calcular mentalmente en cm
-    // Estiramiento (m) = F / K. Luego pasamos a cm (m * 100)
     const combinacionesSencillas = [
         { f: 10, k: 10, cm: 100 },
         { f: 20, k: 20, cm: 100 },
@@ -147,11 +141,9 @@ function generarDesafioFuerzas() {
     const desafio = combinacionesSencillas[Math.floor(Math.random() * combinacionesSencillas.length)];
     g2AlargamientoCorrecto = desafio.cm;
     
-    // Mostramos los datos de forma plana e industrial
     document.getElementById('g2-fuerza').innerText = desafio.f + " N";
     document.getElementById('g2-constante').innerText = desafio.k + " N/m";
     
-    // Generamos las 3 opciones de respuesta (la correcta y dos alternativas incorrectas aleatorias)
     const opcionesContenedor = document.getElementById('g2-opciones');
     opcionesContenedor.innerHTML = "";
     
@@ -161,7 +153,6 @@ function generarDesafioFuerzas() {
         desafio.cm === 50 ? 150 : desafio.cm - 50
     ];
     
-    // Mezclamos el orden de las respuestas
     respuestasPosibles.sort(() => Math.random() - 0.5);
     
     respuestasPosibles.forEach(opcion => {
