@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧪 FyQ Arcade Lab</title>
+    <title>⚛️ Física Y Química </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="neon-background"></div>
-
     <header>
-        <div class="logo">🧪 FYQ <span>ARCADE LAB</span></div>
+        <div class="logo">ARCADE <span>LAB</span></div>
         <div class="tabs">
-            <button onclick="cambiarJuego(1)" id="tab1" class="active">⚛️ El Constructor Atómico</button>
-            <button onclick="cambiarJuego(2)" id="tab2">⚡ El Conector Eléctrico</button>
+            <button onclick="cambiarJuego(1)" id="tab1" class="active">⚛️ EL CONSTRUCTOR</button>
+            <button onclick="cambiarJuego(2)" id="tab2">🛡️ EL DINAMÓMETRO</button>
         </div>
     </header>
 
     <main>
-        <section id="game1" class="card active-game">
-            <h2>⚛️ El Constructor Atómico</h2>
-            <p>Haz clic para añadir partículas. ¡O cambia el modo abajo para restar!</p>
+        <section id="game1" class="card">
+            <h2>⚛️ EL CONSTRUCTOR ATÓMICO</h2>
+            <p>Configura el número exacto de partículas elementales para estabilizar el elemento.</p>
             
             <div class="target">
                 <h3 id="g1-nombre">Cargando...</h3>
@@ -29,49 +30,58 @@
             </div>
 
             <div class="mode-selector">
-                <button id="btn-mode-add" class="mode-btn active" onclick="setModoHerramienta('sumar')">🟢 Modo: Añadir (+)</button>
-                <button id="btn-mode-sub" class="mode-btn" onclick="setModoHerramienta('restar')">🔴 Modo: Quitar (-)</button>
+                <button id="btn-mode-add" class="mode-btn active" onclick="setModoHerramienta('sumar')">AÑADIR (+)</button>
+                <button id="btn-mode-sub" class="mode-btn" onclick="setModoHerramienta('restar')">QUITAR (-)</button>
             </div>
 
             <div class="clicker-grid">
                 <div class="click-card" onclick="gestionarClic('p')" oncontextmenu="gestionarClicDerecho(event, 'p')">
-                    <div class="icon" style="background: #ff4d4d;">+</div>
+                    <div class="particle-tag proton">P+</div>
                     <h4>Protones</h4>
                     <div class="counter" id="c-p">0</div>
                 </div>
                 <div class="click-card" onclick="gestionarClic('e')" oncontextmenu="gestionarClicDerecho(event, 'e')">
-                    <div class="icon" style="background: #33ccff;">-</div>
+                    <div class="particle-tag electron">E-</div>
                     <h4>Electrones</h4>
                     <div class="counter" id="c-e">0</div>
                 </div>
                 <div class="click-card" onclick="gestionarClic('n')" oncontextmenu="gestionarClicDerecho(event, 'n')">
-                    <div class="icon" style="background: #ffcc00; color: #000;">0</div>
+                    <div class="particle-tag neutron">N⁰</div>
                     <h4>Neutrones</h4>
                     <div class="counter" id="c-n">0</div>
                 </div>
             </div>
 
-            <p class="tip-text">💡 Pista: Si juegas en PC, puedes hacer clic derecho sobre las tarjetas para restar directamente.</p>
+            <p class="tip-text">💡 Tip: En PC puedes usar el clic derecho sobre las tarjetas para restar al instante.</p>
 
-            <button class="btn" onclick="validarAtomo()">🧪 Verificar Estabilidad</button>
+            <button class="btn" onclick="validarAtomo()">COMPROBAR ESTABILIDAD</button>
             <div id="fb1" class="feedback"></div>
         </section>
 
         <section id="game2" class="card hidden">
-            <h2>⚡ El Conector Eléctrico</h2>
-            <p>Resuelve los problemas eléctricos del laboratorio antes de que ocurra un apagón.</p>
+            <h2>🛡️ EL DINAMÓMETRO</h2>
+            <p>¡Aplica la Ley de Hooke! Calcula cuánto se estira el muelle según los datos del laboratorio.</p>
 
-            <div class="target">
-                <h3 id="g2-enunciado">Cargando desafío...</h3>
+            <div class="physics-display-grid">
+                <div class="physics-panel panel-force">
+                    <div class="physics-title">FUERZA APLICADA</div>
+                    <div class="physics-value" id="g2-fuerza">0 N</div>
+                </div>
+                <div class="physics-panel panel-k">
+                    <div class="physics-title">CONSTANTE (K)</div>
+                    <div class="physics-value" id="g2-constante">0 N/m</div>
+                </div>
             </div>
 
-            <div class="options" id="g2-opciones"></div>
+            <p class="question-text">¿CUÁL ES EL ALARGAMIENTO DEL MUELLE?</p>
+            <div class="options" id="g2-opciones">
+                </div>
             
             <div id="fb2" class="feedback"></div>
         </section>
     </main>
 
-    <div class="score-sticky">🏆 Puntos: <span id="score">0</span></div>
+    <div class="score-sticky">SCORE: <span id="score">0</span></div>
 
     <script src="script.js"></script>
 </body>
